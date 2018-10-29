@@ -20,7 +20,7 @@ namespace RoslynDocumentorTests {
 			var classInfo = result[0];
 			Assert.True( classInfo.IsStatic );
 			Assert.Equal( "StaticClass", classInfo.Name );
-			Assert.Equal( null, classInfo.Description );
+			Assert.Null( classInfo.Description );
 		}
 
 
