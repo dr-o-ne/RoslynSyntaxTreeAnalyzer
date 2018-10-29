@@ -2,29 +2,32 @@
 
 	internal static class CodeSamples {
 
+		public static string EmptyStaticClass = @"namespace RoslynDocumentorTests {
+	public static class StaticClass {
+	}
+}";
+
 		public static string Sample1 = @"using Xunit;
 
 namespace CodilityLessons {
 
+	/// <summary>
+	/// My Solution
+	/// </summary>
 	public sealed class Nesting {
 
 		/// <summary>
 		/// Special case of Brackets problem, but for this case no need to create a stack. Just need to check ""stack"" size 
 		/// </summary>
-		public int solution( string S ) {
+		public int solution1( string S ) {
+			return -1;
+		}
 
-			var acc = 0;
+		private int solution2( string S ) => return 1;
 
-			foreach( var item in S ) {
-
-				if( item == '(' )      acc++;
-				else if( item == ')' ) acc--;
-
-				if( acc < 0 )
-					return 0;
-			}
-
-			return acc == 0 ? 1 : 0;
+		internal bool solution3( int S ) 
+		{ 
+			return true;
 		}
 
 		[Theory]

@@ -6,4 +6,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="2.9.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CodeAnalysis.CSharp">
+      <HintPath>C:\Users\drone\.nuget\packages\microsoft.codeanalysis.csharp\2.9.0\lib\netstandard1.3\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

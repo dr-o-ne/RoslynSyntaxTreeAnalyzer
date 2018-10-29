@@ -11,7 +11,6 @@ namespace RoslynDocumentor {
 
 		public async Task<IEnumerable<ClassInfo>> Analyze( Solution solution ) {
 
-
 			foreach( var project in solution.Projects ) {
 			foreach( var doc in project.Documents ) {
 					SyntaxTree tree = await doc.GetSyntaxTreeAsync();
@@ -21,7 +20,6 @@ namespace RoslynDocumentor {
 					//var classes = GetClassInfo( tree, doc.FilePath );
 				}
 			}
-
 
 			return new List<ClassInfo>();
 		}
