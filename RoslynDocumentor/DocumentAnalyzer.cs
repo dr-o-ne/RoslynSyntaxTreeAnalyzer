@@ -4,7 +4,7 @@ using RoslynDocumentor.Models;
 
 namespace RoslynDocumentor {
 
-	internal sealed class DocumentAnalyzer {
+	public sealed class DocumentAnalyzer {
 
 		public IEnumerable<ClassInfo> Analyze( SyntaxTree tree ) {
 			return null;
