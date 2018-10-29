@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis.MSBuild;
+using RoslynDocumentor;
 
 namespace Launcher {
 
 	internal class Program {
 
+		//TODO:
 		private const string SolutionPath = @"D:\Knowledge\Codility\Codility-Lessons\CodilityLessons\CodilityLessons.sln";
 
 		private static async Task Main( string[] args ) {
@@ -37,6 +39,10 @@ namespace Launcher {
 				// Attach progress reporter so we print projects as they are loaded.
 				var solution = await workspace.OpenSolutionAsync( SolutionPath, new ConsoleProgressReporter() );
 				Console.WriteLine( $"Finished loading solution '{SolutionPath}'" );
+
+				//TODO:
+				var engine = new SolutionAnalyzer();
+				var result = engine.Analyze( solution ).Result;
 
 			}
 
