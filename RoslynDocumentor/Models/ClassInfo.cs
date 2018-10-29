@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace RoslynSyntaxTreeAnalyzer.Models {
+namespace RoslynDocumentor.Models {
 
 	public class ClassInfo {
 

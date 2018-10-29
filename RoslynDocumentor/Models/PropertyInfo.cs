@@ -1,4 +1,4 @@
-﻿namespace RoslynSyntaxTreeAnalyzer.Models {
+﻿namespace RoslynDocumentor.Models {
 
 	public class PropertyInfo : IMemberInfo {
 
