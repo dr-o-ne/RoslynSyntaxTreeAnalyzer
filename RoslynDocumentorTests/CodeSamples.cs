@@ -30,6 +30,13 @@ namespace CodilityLessons {
 			return true;
 		}
 
+		public static List<int> AutoProperty { get; set; }
+
+		/// <summary>
+		/// Description 
+		/// </summary>
+		public int ReadOnlyProperty { get; }
+
 		[Theory]
 		[InlineData( 0, ""())"" )]
 		[InlineData( 1, ""(()(())())"" )]

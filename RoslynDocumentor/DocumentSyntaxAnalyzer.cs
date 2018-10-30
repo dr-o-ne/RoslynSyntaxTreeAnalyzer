@@ -10,56 +10,74 @@ namespace RoslynDocumentor {
 
 	public sealed class DocumentSyntaxAnalyzer {
 
-		public Data Analyze( SyntaxTree tree ) {
+		public List<ClassInfo> Analyze( SyntaxTree tree, string filePath ) {
 
 			var result = new List<ClassInfo>();
 
 			var classNodes = tree.GetRoot().DescendantNodes().OfType<ClassDeclarationSyntax>().Where( c => IsPublic( c.Modifiers ) ).ToList();
 			foreach( var classNode in classNodes ) {
-				result.Add( Analyze( classNode ) );
+				result.Add( Analyze( classNode, filePath ) );
 			}
 
-			return new Data( result );
+			return result;
 
 		}
 
-		public ClassInfo Analyze( ClassDeclarationSyntax classNode ) {
+		private static ClassInfo Analyze( ClassDeclarationSyntax node, string filePath ) {
 
-
-			var identifier = GetIdentifier( classNode );
-
+			var identifier = GetIdentifier( node );
 
 			var result = new ClassInfo();
 
 			result.Name = GetName( identifier );
-			result.IsStatic = IsStatic( classNode.Modifiers );
-			result.Description = GetSummary( classNode );
+			result.IsStatic = IsStatic( node.Modifiers );
+			result.Description = GetSummary( node );
 			result.Location.LineNumber = GetLineNumber( identifier );
+			result.Location.SourceFile = filePath;
 
-			var methods = classNode.DescendantNodes().OfType<MethodDeclarationSyntax>().Where( m => IsPublic( m.Modifiers ) ).ToList();
+			var methods = node.DescendantNodes().OfType<MethodDeclarationSyntax>().Where( m => IsPublic( m.Modifiers ) ).ToList();
 			foreach( var method in methods ) {
-				result.Methods.Add( AnalyzeMethod( method ) );
+				result.Methods.Add( AnalyzeMethod( method, filePath ) );
 			}
 
+			var properties = node.DescendantNodes().OfType<PropertyDeclarationSyntax>().Where( m => IsPublic( m.Modifiers ) ).ToList();
+			foreach( var property in properties ) {
+				result.Properties.Add( AnalyzeProperty( property, filePath ) );
+			}
 
-			result.ClassSyntaxNode = classNode;
+			result.ClassSyntaxNode = node;
 
 			return result;
 		}
 
-		private static MethodInfo AnalyzeMethod( MethodDeclarationSyntax methodNode ) {
+		private static PropertyInfo AnalyzeProperty( PropertyDeclarationSyntax node, string filePath ) {
 
-			var identifier = GetIdentifier( methodNode );
+			var identifier = GetIdentifier( node );
+
+			var result = new PropertyInfo();
+
+			result.Name = GetName( identifier );
+			result.IsStatic = IsStatic( node.Modifiers );
+			result.Description = GetSummary( node );
+			result.Location.LineNumber = GetLineNumber( identifier );
+			result.Location.SourceFile = filePath;
+
+			return result;
+		}
+
+		private static MethodInfo AnalyzeMethod( MethodDeclarationSyntax node, string filePath ) {
+
+			var identifier = GetIdentifier( node );
 
 			var result = new MethodInfo();
 
 			result.Name = GetName( identifier );
-			result.IsStatic = IsStatic( methodNode.Modifiers );
-			result.Description = GetSummary( methodNode );
+			result.IsStatic = IsStatic( node.Modifiers );
+			result.Description = GetSummary( node );
 			result.Location.LineNumber = GetLineNumber( identifier );
+			result.Location.SourceFile = filePath;
 
-			var parameters = methodNode.ParameterList.Parameters.ToList();
-			foreach( var parameter in parameters ) {
+			foreach( var parameter in node.ParameterList.Parameters ) {
 				result.Parameters.Add( AnalyzeParameter( parameter ) );
 			}
 
@@ -67,30 +85,15 @@ namespace RoslynDocumentor {
 
 		}
 
-		private static Parameter AnalyzeParameter( ParameterSyntax parameterNode ) {
-
-			var identifier = GetIdentifier( parameterNode );
-			var result = new Parameter();
-
-			result.Name = GetName( identifier );
-			result.TypeName = parameterNode.Type.ToString();
-
-
-			var tt = parameterNode.Type.GetType();
-
-			result.TypeSyntax = parameterNode.Type;
-
-
-			var ssss = tt + "   " +  result.Name;
-
-			//var res = tt is GenericNameSyntax;
-
-			return result;
+		private static Parameter AnalyzeParameter( ParameterSyntax node ) {
+			return new Parameter {
+				TypeSyntax = node.Type
+			};
 		}
 
-		private static string GetSummary( CSharpSyntaxNode classNode ) {
+		private static string GetSummary( CSharpSyntaxNode node ) {
 
-			DocumentationCommentTriviaSyntax xmlTrivia = classNode.GetLeadingTrivia()
+			DocumentationCommentTriviaSyntax xmlTrivia = node.GetLeadingTrivia()
 				.Select( i => i.GetStructure() )
 				.OfType<DocumentationCommentTriviaSyntax>()
 				.FirstOrDefault();
@@ -107,9 +110,9 @@ namespace RoslynDocumentor {
 
 		private static SyntaxToken GetIdentifier( BaseTypeDeclarationSyntax node ) => node.Identifier;
 
-		private static SyntaxToken GetIdentifier( MethodDeclarationSyntax node ) => node.Identifier;
+		private static SyntaxToken GetIdentifier( PropertyDeclarationSyntax node ) => node.Identifier;
 
-		private static SyntaxToken GetIdentifier( ParameterSyntax node ) => node.Identifier;
+		private static SyntaxToken GetIdentifier( MethodDeclarationSyntax node ) => node.Identifier;
 
 		private static string GetName( SyntaxToken syntaxToken ) => syntaxToken.Text;
 

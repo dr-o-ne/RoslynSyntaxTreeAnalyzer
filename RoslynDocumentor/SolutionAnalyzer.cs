@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using RoslynDocumentor.Models;
 
 namespace RoslynDocumentor {
@@ -15,59 +14,40 @@ namespace RoslynDocumentor {
 
 		public async Task<IEnumerable<ClassInfo>> Analyze( Solution solution ) {
 
-			foreach( var project in solution.Projects ) {
-			foreach( var doc in project.Documents ) {
+			var result = new List<ClassInfo>();
 
-					SyntaxTree tree = await doc.GetSyntaxTreeAsync();
+			foreach( Document doc in solution.Projects.SelectMany( p => p.Documents ) ) {
 
-					var data = m_syntaxAnalyzer.Analyze( tree );
-
-					SemanticModel model = await doc.GetSemanticModelAsync();
-
-
-					foreach( ClassInfo classInfo in data.ClassInfos ) {
+				// Syntax Info
+				SyntaxTree tree = await doc.GetSyntaxTreeAsync();
+				var classInfos = m_syntaxAnalyzer.Analyze( tree, doc.FilePath );
 
 
-
-						var classes = doc.GetSyntaxRootAsync().Result.DescendantNodes().OfType<ClassDeclarationSyntax>();
-						foreach( var cl in classes ) {
-
-							var ttt = model.GetDeclaredSymbol( cl );
-
-
-
-							//var ttt = model.GetTypeInfo( cl ).Type.ContainingNamespace;
-						}
+				/*
+				foreach( var classInfo in classInfos )
+					classInfo.Location.SourceFile = doc.FilePath;
+				foreach( MethodInfo methodInfo in classInfos.SelectMany( x => x.Methods ) ) {
+					
+				}*/
 
 
-						var t1= model.GetTypeInfo( classInfo.ClassSyntaxNode );
-						var t = model.Compilation.GetDeclarationDiagnostics();
+				// Semantic Info
+				SemanticModel model = await doc.GetSemanticModelAsync();
+				foreach( var classInfo in classInfos ) {
+					ISymbol symbol = model.GetDeclaredSymbol( classInfo.ClassSyntaxNode );
+					classInfo.FullName = symbol.ContainingNamespace + "." + symbol.Name;
 
-						//Compilation.GetTypeByMetadataName()
+					foreach( var methodInfo in classInfo.Methods ) {
 
-						foreach( var methodInfo in classInfo.Methods ) {
-							foreach( var parameterInfo in methodInfo.Parameters ) {
-
-								var pInfo = model.GetSymbolInfo( parameterInfo.TypeSyntax );
-
-								var namespaceName = pInfo.Symbol.ContainingNamespace.Name;
-								var typeName = pInfo.Symbol.Name;
-
-								var fullName = namespaceName + "." + typeName;
-
-
-							}
-						}
-
-
-					}	
-
-					m_semanticAnalyzer.Analyze( model, data );
+					}
 
 				}
+
+				result.AddRange( classInfos );
+
 			}
 
-			return new List<ClassInfo>();
+			return result;
 		}
 
 	}
