@@ -23,10 +23,10 @@ namespace CodilityLessons {
 			return -1;
 		}
 
-		public int solution2( string S ) => return 1;
+		public int[] solution2( string S ) => new[] {1};
 
-		public static bool solution3( int S ) 
-		{ 
+		public static bool solution3<T>( T S ) 
+		{
 			return true;
 		}
 

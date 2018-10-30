@@ -13,11 +13,11 @@ namespace RoslynDocumentor.Models {
 		public bool IsStatic { get; set; }
 		public string Description { get; set; }
 		public Location Location { get; set; }
-
-
-
 		public string TypeName { get; set; }
-		public Location TypeLocationInfo { get; set; }
+
+
+		public Location TypeLocationInfo { get; set; } //TODO:
+
 		public ICollection<Parameter> Parameters { get; set; }
 
 		public class Parameter {
@@ -25,9 +25,11 @@ namespace RoslynDocumentor.Models {
 			public Parameter() {
 				TypeLocationInfo = new Location();
 			}
-			public bool IsGeneric { get; set; }
+
 			public string Name { get; set; }
 			public string TypeName { get; set; }
+
+			public bool IsGeneric { get; set; }
 			public Location TypeLocationInfo { get; set; }
 			public string DefaultValue { get; set; }
 		}

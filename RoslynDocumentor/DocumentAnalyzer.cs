@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using RoslynDocumentor.Models;
+using static RoslynDocumentor.Models.MethodInfo;
 
 namespace RoslynDocumentor {
 
@@ -25,15 +27,15 @@ namespace RoslynDocumentor {
 		public ClassInfo Analyze( ClassDeclarationSyntax classNode ) {
 
 
-			var syntaxToken = GetIdentifier( classNode );
+			var identifier = GetIdentifier( classNode );
 
 
 			var result = new ClassInfo();
 
-			result.Name = GetName( syntaxToken );
+			result.Name = GetName( identifier );
 			result.IsStatic = IsStatic( classNode.Modifiers );
 			result.Description = GetSummary( classNode );
-			result.Location.LineNumber = GetLineNumber( syntaxToken );
+			result.Location.LineNumber = GetLineNumber( identifier );
 
 			var methods = classNode.DescendantNodes().OfType<MethodDeclarationSyntax>().Where( m => IsPublic( m.Modifiers ) ).ToList();
 			foreach( var method in methods ) {
@@ -45,17 +47,36 @@ namespace RoslynDocumentor {
 
 		private static MethodInfo AnalyzeMethod( MethodDeclarationSyntax methodNode ) {
 
-			var syntaxToken = GetIdentifier( methodNode );
+			var identifier = GetIdentifier( methodNode );
 
 			var result = new MethodInfo();
 
-			result.Name = GetName( syntaxToken );
+			result.Name = GetName( identifier );
 			result.IsStatic = IsStatic( methodNode.Modifiers );
 			result.Description = GetSummary( methodNode );
-			result.Location.LineNumber = GetLineNumber( syntaxToken );
+			result.Location.LineNumber = GetLineNumber( identifier );
+
+			/*var parameters = methodNode.ParameterList.Parameters.ToList();
+			foreach( var parameter in parameters ) {
+				result.Parameters.Add( AnalyzeParameter( parameter ) );
+			}*/
 
 			return result;
 
+		}
+
+		private static Parameter AnalyzeParameter( ParameterSyntax parameterNode ) {
+
+			var identifier = GetIdentifier( parameterNode );
+			var result = new Parameter();
+
+			result.Name = GetName( identifier );
+			result.TypeName = parameterNode.Type.ToString();
+
+
+			var tt = parameterNode.Type.GetType();
+
+			return result;
 		}
 
 		private static string GetSummary( CSharpSyntaxNode classNode ) {
@@ -75,9 +96,17 @@ namespace RoslynDocumentor {
 
 		}
 
+
+
 		private static SyntaxToken GetIdentifier( BaseTypeDeclarationSyntax node ) => node.Identifier;
 
 		private static SyntaxToken GetIdentifier( MethodDeclarationSyntax node ) => node.Identifier;
+
+		private static SyntaxToken GetIdentifier( ParameterSyntax node ) => node.Identifier;
+
+
+
+
 
 		private static string GetName( SyntaxToken syntaxToken ) => syntaxToken.Text;
 
