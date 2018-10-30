@@ -23,9 +23,9 @@ namespace CodilityLessons {
 			return -1;
 		}
 
-		private int solution2( string S ) => return 1;
+		public int solution2( string S ) => return 1;
 
-		internal bool solution3( int S ) 
+		public static bool solution3( int S ) 
 		{ 
 			return true;
 		}
