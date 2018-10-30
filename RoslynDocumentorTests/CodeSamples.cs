@@ -39,5 +39,32 @@ namespace CodilityLessons {
 
 }";
 
+		public static string Classes = @"	
+using System;
+
+namespace RoslynDocumentorTests {
+
+
+	public sealed class EmptySealedClass {
+	}
+
+	[Serializable]
+	public class EmptyClassBase {
+	}
+
+	[Obsolete]
+	[Serializable]
+	public class EmptyClassChild : EmptyClassBase {
+	}
+
+	public sealed class EmptySealedClassChild : EmptyClassBase {
+	}
+
+	public static class StaticClass {
+	}
+
+}";
+
+
 	}
 }

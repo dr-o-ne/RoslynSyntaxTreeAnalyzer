@@ -31,6 +31,11 @@ namespace RoslynDocumentor {
 			result.Description = GetSummary( classNode );
 			result.Location.LineNumber = GetLocation( classNode );
 
+			var methods = classNode.DescendantNodes().OfType<MethodDeclarationSyntax>().Where( m => IsPublic( m.Modifiers ) ).ToList();
+			foreach( var method in methods ) {
+				result.Methods.Add( Analyze( method ) );
+			}
+
 			return result;
 		}
 
@@ -45,7 +50,7 @@ namespace RoslynDocumentor {
 				.OfType<XmlElementSyntax>()
 				.Any( i => i.StartTag.Name.ToString().Equals( "summary" ) );
 
-			return xmlTrivia?.ToString();
+			return isSummary == true ? xmlTrivia.ToString() : null;
 
 		}
 
@@ -56,6 +61,12 @@ namespace RoslynDocumentor {
 		private static bool IsPublic( SyntaxTokenList modifiers ) => HasModifier( modifiers, "public" );
 
 		private static bool HasModifier( SyntaxTokenList modifiers, string modifier ) => modifiers.Any( m => m.Value.Equals( modifier ) );
+
+		private static MethodInfo Analyze( MethodDeclarationSyntax methodNode ) {
+
+
+			return null;
+		}
 
 	}
 

@@ -8,7 +8,7 @@
 		public Location TypeLocationInfo { get; set; }
 		public bool IsStatic { get; set; }
 		public string Description { get; set; }
-		public Location LocationInfo { get; set; }
+		public Location Location { get; set; }
 
 	}
 

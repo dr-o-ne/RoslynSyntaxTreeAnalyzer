@@ -6,6 +6,8 @@ namespace RoslynDocumentor.Models {
 
 		public ClassInfo() {
 			Location = new Location();
+			Methods = new List<MethodInfo>();
+			Properties = new List<PropertyInfo>();
 		}
 
 		public string Name { get; set; }
@@ -17,8 +19,8 @@ namespace RoslynDocumentor.Models {
 		public string Description { get; set; }
 
 		public Location Location { get; set; }
-		public IEnumerable<MethodInfo> Methods { get; set; }
-		public IEnumerable<PropertyInfo> Properties { get; set; }
+		public ICollection<MethodInfo> Methods { get; set; }
+		public ICollection<PropertyInfo> Properties { get; set; }
 
 	}
 

@@ -12,7 +12,7 @@
 
 		bool IsStatic { get; set; }
 		string Description { get; set; }
-		Location LocationInfo { get; set; }
+		Location Location { get; set; }
 
 	}
 
