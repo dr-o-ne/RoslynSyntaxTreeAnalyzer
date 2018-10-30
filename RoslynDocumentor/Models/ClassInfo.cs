@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace RoslynDocumentor.Models {
 
@@ -11,6 +12,7 @@ namespace RoslynDocumentor.Models {
 		}
 
 		public string Name { get; set; }
+		public string FullName { get; set; }
 		public bool IsStatic { get; set; }
 
 		/// <summary>
@@ -21,6 +23,8 @@ namespace RoslynDocumentor.Models {
 		public Location Location { get; set; }
 		public ICollection<MethodInfo> Methods { get; set; }
 		public ICollection<PropertyInfo> Properties { get; set; }
+
+		public ClassDeclarationSyntax ClassSyntaxNode { get; set; }
 
 	}
 

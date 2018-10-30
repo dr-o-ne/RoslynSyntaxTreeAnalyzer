@@ -11,7 +11,7 @@ namespace Launcher {
 	internal class Program {
 
 		//TODO:
-		private const string SolutionPath = @"D:\Knowledge\Codility\Codility-Lessons\CodilityLessons\CodilityLessons.sln";
+		private const string SolutionPath = @"D:\Work\Upwork\2_RoslynAnalyzer\Test\CodeToAnalyze.sln";
 
 		private static async Task Main( string[] args ) {
 

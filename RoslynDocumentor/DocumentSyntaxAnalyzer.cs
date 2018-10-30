@@ -41,6 +41,9 @@ namespace RoslynDocumentor {
 				result.Methods.Add( AnalyzeMethod( method ) );
 			}
 
+
+			result.ClassSyntaxNode = classNode;
+
 			return result;
 		}
 
@@ -54,9 +57,6 @@ namespace RoslynDocumentor {
 			result.IsStatic = IsStatic( methodNode.Modifiers );
 			result.Description = GetSummary( methodNode );
 			result.Location.LineNumber = GetLineNumber( identifier );
-
-
-
 
 			var parameters = methodNode.ParameterList.Parameters.ToList();
 			foreach( var parameter in parameters ) {
@@ -76,8 +76,10 @@ namespace RoslynDocumentor {
 			result.TypeName = parameterNode.Type.ToString();
 
 
-
 			var tt = parameterNode.Type.GetType();
+
+			result.TypeSyntax = parameterNode.Type;
+
 
 			var ssss = tt + "   " +  result.Name;
 

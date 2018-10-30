@@ -4,6 +4,8 @@
 
 		string Name { get; }
 		string TypeName { get; set; }
+		string FullTypeName { get; set; }
+
 
 		/// <summary>
 		///     If the TypeName is defined in this solution, this is its location (otherwise null)

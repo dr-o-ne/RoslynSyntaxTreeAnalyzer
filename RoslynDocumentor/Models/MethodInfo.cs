@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace RoslynDocumentor.Models {
 
@@ -14,7 +15,7 @@ namespace RoslynDocumentor.Models {
 		public string Description { get; set; }
 		public Location Location { get; set; }
 		public string TypeName { get; set; }
-
+		public string FullTypeName { get; set; }
 
 		public Location TypeLocationInfo { get; set; } //TODO:
 
@@ -32,6 +33,8 @@ namespace RoslynDocumentor.Models {
 			public bool IsGeneric { get; set; }
 			public Location TypeLocationInfo { get; set; }
 			public string DefaultValue { get; set; }
+
+			public TypeSyntax TypeSyntax { get; set; }
 		}
 
 	}
