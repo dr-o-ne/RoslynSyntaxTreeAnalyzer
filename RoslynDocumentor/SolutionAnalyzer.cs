@@ -22,15 +22,6 @@ namespace RoslynDocumentor {
 				SyntaxTree tree = await doc.GetSyntaxTreeAsync();
 				var classInfos = m_syntaxAnalyzer.Analyze( tree, doc.FilePath );
 
-
-				/*
-				foreach( var classInfo in classInfos )
-					classInfo.Location.SourceFile = doc.FilePath;
-				foreach( MethodInfo methodInfo in classInfos.SelectMany( x => x.Methods ) ) {
-					
-				}*/
-
-
 				// Semantic Info
 				SemanticModel model = await doc.GetSemanticModelAsync();
 				foreach( var classInfo in classInfos ) {

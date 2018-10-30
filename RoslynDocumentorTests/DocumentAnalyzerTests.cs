@@ -79,10 +79,13 @@ namespace RoslynDocumentorTests {
 			Assert.Equal( "AutoProperty", property1.Name );
 			Assert.Null( property1.Description );
 			Assert.True( property1.IsStatic );
+			Assert.Equal( 24, property1.Location.LineNumber );
 
 			Assert.Equal( "ReadOnlyProperty", property2.Name );
 			Assert.NotNull( property2.Description );
 			Assert.False( property2.IsStatic );
+			Assert.Equal( 29, property2.Location.LineNumber );
+
 
 		}
 
