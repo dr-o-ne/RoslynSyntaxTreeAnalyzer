@@ -4,6 +4,10 @@ namespace RoslynDocumentor.Models {
 
 	public class ClassInfo {
 
+		public ClassInfo() {
+			Location = new Location();
+		}
+
 		public string Name { get; set; }
 		public bool IsStatic { get; set; }
 

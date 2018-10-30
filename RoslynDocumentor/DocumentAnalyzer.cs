@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using RoslynDocumentor.Models;
 
@@ -28,11 +29,12 @@ namespace RoslynDocumentor {
 			result.Name = classNode.Identifier.Text;
 			result.IsStatic = IsStatic( classNode.Modifiers );
 			result.Description = GetSummary( classNode );
+			result.Location.LineNumber = GetLocation( classNode );
 
 			return result;
 		}
 
-		private static string GetSummary( ClassDeclarationSyntax classNode ) {
+		private static string GetSummary( CSharpSyntaxNode classNode ) {
 
 			DocumentationCommentTriviaSyntax xmlTrivia = classNode.GetLeadingTrivia()
 				.Select( i => i.GetStructure() )
@@ -46,6 +48,8 @@ namespace RoslynDocumentor {
 			return xmlTrivia?.ToString();
 
 		}
+
+		private static int GetLocation( BaseTypeDeclarationSyntax classNode ) => classNode.Identifier.GetLocation().GetMappedLineSpan().StartLinePosition.Line + 1;
 
 		private static bool IsStatic( SyntaxTokenList modifiers ) => HasModifier( modifiers, "static" );
 

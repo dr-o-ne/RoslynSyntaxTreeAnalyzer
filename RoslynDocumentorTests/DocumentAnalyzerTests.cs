@@ -21,6 +21,7 @@ namespace RoslynDocumentorTests {
 			Assert.True( classInfo.IsStatic );
 			Assert.Equal( "StaticClass", classInfo.Name );
 			Assert.Null( classInfo.Description );
+			Assert.Equal( 2, classInfo.Location.LineNumber );
 		}
 
 
@@ -35,6 +36,7 @@ namespace RoslynDocumentorTests {
 			Assert.False( classInfo.IsStatic );
 			Assert.Equal( "Nesting", classInfo.Name );
 			Assert.Equal( " <summary>\r\n\t/// My Solution\r\n\t/// </summary>\r\n", classInfo.Description );
+			Assert.Equal( 8, classInfo.Location.LineNumber );
 
 		}
 
