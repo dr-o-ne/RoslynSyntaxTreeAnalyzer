@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -9,9 +8,9 @@ using static RoslynDocumentor.Models.MethodInfo;
 
 namespace RoslynDocumentor {
 
-	public sealed class DocumentAnalyzer {
+	public sealed class DocumentSyntaxAnalyzer {
 
-		public IEnumerable<ClassInfo> Analyze( SyntaxTree tree ) {
+		public Data Analyze( SyntaxTree tree ) {
 
 			var result = new List<ClassInfo>();
 
@@ -20,7 +19,7 @@ namespace RoslynDocumentor {
 				result.Add( Analyze( classNode ) );
 			}
 
-			return result;
+			return new Data( result );
 
 		}
 
@@ -56,10 +55,13 @@ namespace RoslynDocumentor {
 			result.Description = GetSummary( methodNode );
 			result.Location.LineNumber = GetLineNumber( identifier );
 
-			/*var parameters = methodNode.ParameterList.Parameters.ToList();
+
+
+
+			var parameters = methodNode.ParameterList.Parameters.ToList();
 			foreach( var parameter in parameters ) {
 				result.Parameters.Add( AnalyzeParameter( parameter ) );
-			}*/
+			}
 
 			return result;
 
@@ -74,7 +76,12 @@ namespace RoslynDocumentor {
 			result.TypeName = parameterNode.Type.ToString();
 
 
+
 			var tt = parameterNode.Type.GetType();
+
+			var ssss = tt + "   " +  result.Name;
+
+			//var res = tt is GenericNameSyntax;
 
 			return result;
 		}
@@ -96,17 +103,11 @@ namespace RoslynDocumentor {
 
 		}
 
-
-
 		private static SyntaxToken GetIdentifier( BaseTypeDeclarationSyntax node ) => node.Identifier;
 
 		private static SyntaxToken GetIdentifier( MethodDeclarationSyntax node ) => node.Identifier;
 
 		private static SyntaxToken GetIdentifier( ParameterSyntax node ) => node.Identifier;
-
-
-
-
 
 		private static string GetName( SyntaxToken syntaxToken ) => syntaxToken.Text;
 
@@ -117,9 +118,6 @@ namespace RoslynDocumentor {
 		private static bool IsPublic( SyntaxTokenList modifiers ) => HasModifier( modifiers, "public" );
 
 		private static bool HasModifier( SyntaxTokenList modifiers, string modifier ) => modifiers.Any( m => m.Value.Equals( modifier ) );
-
-
-
 
 	}
 

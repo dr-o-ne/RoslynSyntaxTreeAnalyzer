@@ -7,17 +7,23 @@ namespace RoslynDocumentor {
 
 	public sealed class SolutionAnalyzer {
 
-		private readonly DocumentAnalyzer m_documentAnalyzer = new DocumentAnalyzer();
+		private readonly DocumentSyntaxAnalyzer m_syntaxAnalyzer = new DocumentSyntaxAnalyzer();
+		private readonly DocumentSemanticAnalyzer m_semanticAnalyzer = new DocumentSemanticAnalyzer();
+
 
 		public async Task<IEnumerable<ClassInfo>> Analyze( Solution solution ) {
 
 			foreach( var project in solution.Projects ) {
 			foreach( var doc in project.Documents ) {
+
 					SyntaxTree tree = await doc.GetSyntaxTreeAsync();
 
-					m_documentAnalyzer.Analyze( tree );
+					var data = m_syntaxAnalyzer.Analyze( tree );
 
-					//var classes = GetClassInfo( tree, doc.FilePath );
+					SemanticModel model = await doc.GetSemanticModelAsync();
+
+					m_semanticAnalyzer.Analyze( model, data );
+
 				}
 			}
 

@@ -9,16 +9,16 @@ namespace RoslynDocumentorTests {
 
 	public sealed class DocumentAnalyzerTests {
 
-		private readonly DocumentAnalyzer m_sut = new DocumentAnalyzer();
+		private readonly DocumentSyntaxAnalyzer m_sut = new DocumentSyntaxAnalyzer();
 
 		[Fact]
 		public void EmptyStaticClass_Test() {
 
 			SyntaxTree tree = CSharpSyntaxTree.ParseText( CodeSamples.EmptyStaticClass );
-			var result = m_sut.Analyze( tree ).ToList();
+			var result = m_sut.Analyze( tree );
 
-			Assert.Single( result );
-			var classInfo = result[0];
+			Assert.Single( result.ClassInfos );
+			var classInfo = result.ClassInfos[0];
 			Assert.True( classInfo.IsStatic );
 			Assert.Equal( "StaticClass", classInfo.Name );
 			Assert.Null( classInfo.Description );
@@ -33,11 +33,11 @@ namespace RoslynDocumentorTests {
 		public void Sample1_Test() {
 
 			SyntaxTree tree = CSharpSyntaxTree.ParseText( CodeSamples.Sample1 );
-			var result = m_sut.Analyze( tree ).ToList();
+			var result = m_sut.Analyze( tree );
 
 			// class
-			Assert.Single( result );
-			var classInfo = result[0];
+			Assert.Single( result.ClassInfos );
+			var classInfo = result.ClassInfos[0];
 			Assert.False( classInfo.IsStatic );
 			Assert.Equal( "Nesting", classInfo.Name );
 			Assert.Equal( " <summary>\r\n\t/// My Solution\r\n\t/// </summary>\r\n", classInfo.Description );
