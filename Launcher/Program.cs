@@ -11,9 +11,9 @@ namespace Launcher {
 	internal class Program {
 
 		//TODO:
-		//private const string SolutionPath = @"D:\Work\Upwork\2_RoslynAnalyzer\Test\CodeToAnalyze.sln";
+		private const string SolutionPath = @"D:\Work\Upwork\2_RoslynAnalyzer\Test\CodeToAnalyze.sln";
 
-		private const string SolutionPath = @"D:\Work\Upwork\1_QueryTree\QueryTree.sln";
+		//private const string SolutionPath = @"D:\Work\Upwork\1_QueryTree\QueryTree.sln";
 
 
 		private static async Task Main( string[] args ) {

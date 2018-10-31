@@ -13,15 +13,17 @@ namespace RoslynDocumentor.Models {
 
 		public string Name { get; set; }
 		public string Description { get; set; }
-		public bool IsStatic { get; set; }
 		public Location Location { get; set; }
 
+		public bool IsStatic { get; set; }
 		// return type
 		public Location TypeLocation { get; set; }
 		public string TypeName { get; set; }
 		public string FullTypeName { get; set; }							//<---
 
 		public ICollection<Parameter> Parameters { get; set; }
+
+		public MethodDeclarationSyntax Node { get; set; }
 
 		public class Parameter {
 
@@ -31,12 +33,12 @@ namespace RoslynDocumentor.Models {
 
 			public string Name { get; set; }
 			public string TypeName { get; set; }
-
-			public bool IsGeneric { get; set; }
-			public Location TypeLocationInfo { get; set; }
+			public string FullTypeName { get; set; }    //<----
 			public string DefaultValue { get; set; }
 
-			public TypeSyntax TypeSyntax { get; set; }						//<--- TODO: mb not needed
+			public bool IsGeneric { get; set; } //<--- ???
+			public Location TypeLocationInfo { get; set; }
+
 		}
 
 	}

@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using RoslynDocumentor.Models;
+using static RoslynDocumentor.Models.MethodInfo;
+using MethodInfo = RoslynDocumentor.Models.MethodInfo;
 
 namespace RoslynDocumentor {
 
@@ -26,10 +28,11 @@ namespace RoslynDocumentor {
 				SemanticModel model = await doc.GetSemanticModelAsync();
 				foreach( var classInfo in classInfos ) {
 					ISymbol symbol = model.GetDeclaredSymbol( classInfo.ClassSyntaxNode );
-					classInfo.FullName = symbol.ContainingNamespace + "." + symbol.Name;
+					classInfo.FullName = ToFullName( symbol.ContainingNamespace.ToString(), symbol.Name );
+					classInfo.IsStatic = symbol.IsStatic;
 
 					foreach( var methodInfo in classInfo.Methods ) {
-
+						AnalyzeMethod( model, methodInfo );
 					}
 
 				}
@@ -40,6 +43,36 @@ namespace RoslynDocumentor {
 
 			return result;
 		}
+
+		private static void AnalyzeMethod( SemanticModel model, MethodInfo methodInfo ) {
+
+			var methodSymbol = (IMethodSymbol)model.GetDeclaredSymbol( methodInfo.Node );
+
+			methodInfo.IsStatic = methodSymbol.IsStatic;
+			methodInfo.TypeName = methodSymbol.ReturnType.Name;
+			methodInfo.FullTypeName = ToFullName( methodSymbol.ContainingNamespace.ToString(), methodSymbol.Name );
+
+			foreach( IParameterSymbol symbol in methodSymbol.Parameters ) {
+				methodInfo.Parameters.Add( AnalyzeParameter( symbol ) );
+			}
+
+		}
+
+		private static Parameter AnalyzeParameter( IParameterSymbol symbol ) {
+
+			var parameterInfo = new Parameter();
+
+			parameterInfo.Name = symbol.Name;
+			parameterInfo.TypeName = symbol.Type.Name;
+			parameterInfo.FullTypeName = symbol.Type.ContainingNamespace + "." + symbol.Type.Name;
+			if( symbol.HasExplicitDefaultValue )
+				parameterInfo.DefaultValue = symbol.ExplicitDefaultValue.ToString();
+
+			return parameterInfo;
+
+		}
+
+		private static string ToFullName( string containingNamespace, string typeName ) => containingNamespace + "." + typeName;
 
 	}
 

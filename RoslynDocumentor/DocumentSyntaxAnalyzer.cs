@@ -4,7 +4,6 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using RoslynDocumentor.Models;
-using static RoslynDocumentor.Models.MethodInfo;
 
 namespace RoslynDocumentor {
 
@@ -30,7 +29,6 @@ namespace RoslynDocumentor {
 			var result = new ClassInfo();
 
 			result.Name = GetName( identifier );
-			result.IsStatic = IsStatic( node.Modifiers );
 			result.Description = GetSummary( node );
 			result.Location.LineNumber = GetLineNumber( identifier );
 			result.Location.SourceFile = filePath;
@@ -57,7 +55,6 @@ namespace RoslynDocumentor {
 			var result = new PropertyInfo();
 
 			result.Name = GetName( identifier );
-			result.IsStatic = IsStatic( node.Modifiers );
 			result.Description = GetSummary( node );
 			result.Location.LineNumber = GetLineNumber( identifier );
 			result.Location.SourceFile = filePath;
@@ -72,23 +69,13 @@ namespace RoslynDocumentor {
 			var result = new MethodInfo();
 
 			result.Name = GetName( identifier );
-			result.IsStatic = IsStatic( node.Modifiers );
 			result.Description = GetSummary( node );
 			result.Location.LineNumber = GetLineNumber( identifier );
 			result.Location.SourceFile = filePath;
-
-			foreach( var parameter in node.ParameterList.Parameters ) {
-				result.Parameters.Add( AnalyzeParameter( parameter ) );
-			}
+			result.Node = node;
 
 			return result;
 
-		}
-
-		private static Parameter AnalyzeParameter( ParameterSyntax node ) {
-			return new Parameter {
-				TypeSyntax = node.Type
-			};
 		}
 
 		private static string GetSummary( CSharpSyntaxNode node ) {
@@ -118,11 +105,7 @@ namespace RoslynDocumentor {
 
 		private static int GetLineNumber( SyntaxToken syntaxToken ) => syntaxToken.GetLocation().GetMappedLineSpan().StartLinePosition.Line + 1;
 
-		private static bool IsStatic( SyntaxTokenList modifiers ) => HasModifier( modifiers, "static" );
-
-		private static bool IsPublic( SyntaxTokenList modifiers ) => HasModifier( modifiers, "public" );
-
-		private static bool HasModifier( SyntaxTokenList modifiers, string modifier ) => modifiers.Any( m => m.Value.Equals( modifier ) );
+		private static bool IsPublic( SyntaxTokenList modifiers ) => modifiers.Any( m => m.Value.Equals( "public" ) );
 
 	}
 
