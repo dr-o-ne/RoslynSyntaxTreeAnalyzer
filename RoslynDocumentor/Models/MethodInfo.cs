@@ -5,21 +5,13 @@ namespace RoslynDocumentor.Models {
 
 	public class MethodInfo : IMemberInfo {
 
-		public MethodInfo() {
-			Parameters = new List<Parameter>();
-			TypeLocation = new Location();
-			Location = new Location();
-		}
-
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public Location Location { get; set; }
 
 		public bool IsStatic { get; set; }
-		// return type
 		public Location TypeLocation { get; set; }
 		public string TypeName { get; set; }
-		public string FullTypeName { get; set; }							//<---
 
 		public ICollection<Parameter> Parameters { get; set; }
 
@@ -27,17 +19,12 @@ namespace RoslynDocumentor.Models {
 
 		public class Parameter {
 
-			public Parameter() {
-				TypeLocationInfo = new Location();
-			}
-
 			public string Name { get; set; }
 			public string TypeName { get; set; }
-			public string FullTypeName { get; set; }    //<----
 			public string DefaultValue { get; set; }
 
 			public bool IsGeneric { get; set; } //<--- ???
-			public Location TypeLocationInfo { get; set; }
+			public Location TypeLocation { get; set; }
 
 		}
 

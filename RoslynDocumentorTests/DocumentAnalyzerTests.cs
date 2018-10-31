@@ -14,16 +14,14 @@ namespace RoslynDocumentorTests {
 		public void EmptyStaticClass_Test() {
 
 			SyntaxTree tree = CSharpSyntaxTree.ParseText( CodeSamples.EmptyStaticClass );
-			var result = m_sut.Analyze( tree, "TestPath" );
+			var result = m_sut.Analyze( tree );
 
 			Assert.Single( result );
 			var classInfo = result[0];
 			Assert.Equal( "StaticClass", classInfo.Name );
 			Assert.Null( classInfo.Description );
-			Assert.Equal( 2, classInfo.Location.LineNumber );
 			Assert.Empty( classInfo.Methods );
 			Assert.Empty( classInfo.Properties );
-			Assert.Equal( "TestPath", classInfo.Location.SourceFile );
 
 		}
 
@@ -31,15 +29,13 @@ namespace RoslynDocumentorTests {
 		public void Sample1_Test() {
 
 			SyntaxTree tree = CSharpSyntaxTree.ParseText( CodeSamples.Sample1 );
-			var result = m_sut.Analyze( tree, "TestPath" );
+			var result = m_sut.Analyze( tree );
 
 			// class
 			Assert.Single( result );
 			var classInfo = result[0];
 			Assert.Equal( "Nesting", classInfo.Name );
 			Assert.Equal( " <summary>\r\n\t/// My Solution\r\n\t/// </summary>\r\n", classInfo.Description );
-			Assert.Equal( 8, classInfo.Location.LineNumber );
-			Assert.Equal( "TestPath", classInfo.Location.SourceFile );
 
 			// methods
 			Assert.Equal( 4, classInfo.Methods.Count );
@@ -50,19 +46,15 @@ namespace RoslynDocumentorTests {
 
 			Assert.Equal( "solution1", method1.Name );
 			Assert.NotNull( method1.Description );
-			Assert.Equal( 13, method1.Location.LineNumber );
 
 			Assert.Equal( "solution2", method2.Name );
 			Assert.Null( method2.Description );
-			Assert.Equal( 17, method2.Location.LineNumber );
 
 			Assert.Equal( "solution3", method3.Name );
 			Assert.Null( method3.Description );
-			Assert.Equal( 19, method3.Location.LineNumber );
 
 			Assert.Equal( "Test", method4.Name );
 			Assert.Null( method4.Description );
-			Assert.Equal( 34, method4.Location.LineNumber );
 
 			// properties
 
@@ -72,11 +64,9 @@ namespace RoslynDocumentorTests {
 
 			Assert.Equal( "AutoProperty", property1.Name );
 			Assert.Null( property1.Description );
-			Assert.Equal( 24, property1.Location.LineNumber );
 
 			Assert.Equal( "ReadOnlyProperty", property2.Name );
 			Assert.NotNull( property2.Description );
-			Assert.Equal( 29, property2.Location.LineNumber );
 
 		}
 
