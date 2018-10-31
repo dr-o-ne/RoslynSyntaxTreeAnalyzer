@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
 using RoslynDocumentor.Models;
+using static RoslynDocumentor.Models.MethodInfo;
 using Location = Microsoft.CodeAnalysis.Location;
 
 
@@ -35,30 +36,34 @@ namespace RoslynDocumentor {
 		private static void AnalyzeProperty( SemanticModel model, PropertyInfo info ) {
 
 			IPropertySymbol symbol = (IPropertySymbol)model.GetDeclaredSymbol( info.Node );
+			info.Node = null;
 
 			info.Location = ToModelLocation( symbol.Locations, false );
 			info.IsStatic = symbol.IsStatic;
 			info.CanWrite = symbol.IsReadOnly;
 			info.TypeName = symbol.Type.Name;
 			info.TypeLocation = ToModelLocation( symbol.Type.Locations );
-			info.Node = null;
 		}
 
 		private static void AnalyzeMethod( SemanticModel model, MethodInfo info ) {
 
 			IMethodSymbol symbol = (IMethodSymbol)model.GetDeclaredSymbol( info.Node );
+			info.Node = null;
 
 			info.Location = ToModelLocation( symbol.Locations, false );
 			info.IsStatic = symbol.IsStatic;
 			info.TypeName = symbol.ReturnType.Name;
 			info.TypeLocation = ToModelLocation( symbol.ReturnType.Locations );
-			info.Parameters = symbol.Parameters.Select( AnalyzeParameter ).ToList();
-			info.Node = null;
+
+			foreach( var parameterInfo in info.Parameters )
+				AnalyzeParameter( model, parameterInfo );
+
 		}
 
-		private static MethodInfo.Parameter AnalyzeParameter( IParameterSymbol symbol ) {
+		private static void AnalyzeParameter( SemanticModel model, Parameter info ) {
 
-			var info = new MethodInfo.Parameter();
+			IParameterSymbol symbol = (IParameterSymbol)model.GetDeclaredSymbol( info.Node );
+			info.Node = null;
 
 			info.Name = symbol.Name;
 			info.TypeName = symbol.Type.Name;
@@ -68,7 +73,6 @@ namespace RoslynDocumentor {
 			if( symbol.HasExplicitDefaultValue )
 				info.DefaultValue = symbol.ExplicitDefaultValue.ToString();
 
-			return info;
 		}
 
 		private static Models.Location ToModelLocation( ImmutableArray<Location> locations, bool isInSourceOnly = true ) {

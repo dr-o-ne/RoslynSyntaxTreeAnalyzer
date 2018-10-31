@@ -10,19 +10,23 @@ namespace RoslynDocumentor.Models {
 		public Location Location { get; set; }
 		public bool IsStatic { get; set; }
 
-		public Location TypeLocation { get; set; }
+		public string OriginalTypeName { get; set; }
 		public string TypeName { get; set; }
+		public Location TypeLocation { get; set; }
 
 		public ICollection<Parameter> Parameters { get; set; }
 
 		public class Parameter {
 
 			public string Name { get; set; }
-			public string TypeName { get; set; }
 			public string DefaultValue { get; set; }
+			public bool IsGeneric { get; set; }
 
-			public bool IsGeneric { get; set; } 
+			public string OriginalTypeName { get; set; }
+			public string TypeName { get; set; }
 			public Location TypeLocation { get; set; }
+
+			public ParameterSyntax Node { get; set; }
 
 		}
 

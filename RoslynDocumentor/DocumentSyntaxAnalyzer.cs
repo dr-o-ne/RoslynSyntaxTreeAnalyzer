@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using RoslynDocumentor.Models;
+using static RoslynDocumentor.Models.MethodInfo;
 
 
 namespace RoslynDocumentor {
@@ -51,6 +52,7 @@ namespace RoslynDocumentor {
 
 			result.Name = GetName( node.Identifier );
 			result.Description = GetSummary( node );
+			result.OriginalTypeName = node.Type.ToString();
 			result.Node = node;
 
 			return result;
@@ -62,10 +64,19 @@ namespace RoslynDocumentor {
 
 			result.Name = GetName( node.Identifier );
 			result.Description = GetSummary( node );
+			result.OriginalTypeName = node.ReturnType.ToString();
+			result.Parameters = node.ParameterList.Parameters.Select( AnalyzeParameter ).ToList();
 			result.Node = node;
 
 			return result;
 
+		}
+
+		private static Parameter AnalyzeParameter( ParameterSyntax node ) {
+			var result = new Parameter();
+			result.OriginalTypeName = node.Type.ToString();
+			result.Node = node;
+			return result;
 		}
 
 		private static string GetSummary( CSharpSyntaxNode node ) {

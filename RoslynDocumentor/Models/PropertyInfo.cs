@@ -11,6 +11,7 @@ namespace RoslynDocumentor.Models {
 		public bool IsStatic { get; set; }
 		public bool CanWrite { get; set; }
 
+		public string OriginalTypeName { get; set; }
 		public string TypeName { get; set; }
 		public Location TypeLocation { get; set; }
 
