@@ -40,7 +40,7 @@ namespace RoslynDocumentor {
 				.Select( AnalyzeProperty )
 				.ToList();
 
-			result.ClassSyntaxNode = node;
+			result.Node = node;
 
 			return result;
 		}

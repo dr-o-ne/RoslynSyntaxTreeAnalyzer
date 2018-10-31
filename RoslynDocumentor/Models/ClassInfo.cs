@@ -17,7 +17,7 @@ namespace RoslynDocumentor.Models {
 		public ICollection<MethodInfo> Methods { get; set; }
 		public ICollection<PropertyInfo> Properties { get; set; }
 
-		public ClassDeclarationSyntax ClassSyntaxNode { get; set; }
+		public ClassDeclarationSyntax Node { get; set; }
 
 	}
 

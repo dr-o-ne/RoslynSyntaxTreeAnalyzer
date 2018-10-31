@@ -19,7 +19,7 @@ namespace RoslynDocumentor {
 
 		private static void AnalyzeClass( SemanticModel model, ClassInfo info ) {
 
-			ISymbol symbol = model.GetDeclaredSymbol( info.ClassSyntaxNode );
+			ISymbol symbol = model.GetDeclaredSymbol( info.Node );
 			info.IsStatic = symbol.IsStatic;
 			info.Location = ToModelLocation( symbol.Locations, false );
 
@@ -28,7 +28,8 @@ namespace RoslynDocumentor {
 			
 			foreach( var propertyInfo in info.Properties ) 
 				AnalyzeProperty( model, propertyInfo );
-			
+
+			info.Node = null;
 		}
 
 		private static void AnalyzeProperty( SemanticModel model, PropertyInfo info ) {
@@ -40,6 +41,7 @@ namespace RoslynDocumentor {
 			info.CanWrite = symbol.IsReadOnly;
 			info.TypeName = symbol.Type.Name;
 			info.TypeLocation = ToModelLocation( symbol.Type.Locations );
+			info.Node = null;
 		}
 
 		private static void AnalyzeMethod( SemanticModel model, MethodInfo info ) {
@@ -51,6 +53,7 @@ namespace RoslynDocumentor {
 			info.TypeName = symbol.ReturnType.Name;
 			info.TypeLocation = ToModelLocation( symbol.ReturnType.Locations );
 			info.Parameters = symbol.Parameters.Select( AnalyzeParameter ).ToList();
+			info.Node = null;
 		}
 
 		private static MethodInfo.Parameter AnalyzeParameter( IParameterSymbol symbol ) {

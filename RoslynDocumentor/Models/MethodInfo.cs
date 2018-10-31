@@ -8,14 +8,12 @@ namespace RoslynDocumentor.Models {
 		public string Name { get; set; }
 		public string Description { get; set; }
 		public Location Location { get; set; }
-
 		public bool IsStatic { get; set; }
+
 		public Location TypeLocation { get; set; }
 		public string TypeName { get; set; }
 
 		public ICollection<Parameter> Parameters { get; set; }
-
-		public MethodDeclarationSyntax Node { get; set; }
 
 		public class Parameter {
 
@@ -23,10 +21,12 @@ namespace RoslynDocumentor.Models {
 			public string TypeName { get; set; }
 			public string DefaultValue { get; set; }
 
-			public bool IsGeneric { get; set; } //<--- ???
+			public bool IsGeneric { get; set; } 
 			public Location TypeLocation { get; set; }
 
 		}
+
+		public MethodDeclarationSyntax Node { get; set; }
 
 	}
 
